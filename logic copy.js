@@ -1,24 +1,19 @@
-// // Define a markerSize function that will give each city a different radius based on its population
-// function markerSize(population) {
-//     return population / 25;
-// }
+// var myMap = L.map("map", {
+//     center: [38.851824075995296, -116.39751334605495],
+//     zoom: 5
+// });
 
-// // Loop through the cities array and create one marker for each city object
-// for (var i = 0; i < cities.length; i++) {
-//     L.circle(cities[i].location, {
-//         fillOpacity: 0.75,
-//         color: "steelblue",
-//         weight: 1,
-//         // Setting our circle's radius equal to the output of our markerSize function
-//         // This will make our marker's size proportionate to its population
-//         radius: markerSize(cities[i].population)
-//     }).bindPopup("<h1>" + cities[i].name + "</h1> <hr> <h3>Population: " + cities[i].population + "</h3>").addTo(myMap);
-// }
+// var tileApiURL = "https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2FyYzkzOTQiLCJhIjoiY2pkd2dsbzdpMXFydjJ3bXVxbzVud3BlZSJ9.PVCPqYZptjhrL99YCJe94w";
+
+// L.tileLayer(tileApiURL).addTo(myMap);
 
 
+// Store our API endpoint inside queryUrl
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
+// Perform a GET request to the query URL
 d3.json(queryUrl, function(data) {
+    // Once we get a response, send the data.features object to the createFeatures function
     createFeatures(data.features);
 });
 
@@ -41,22 +36,42 @@ function createFeatures(earthquakeData) {
 
     // Sending our earthquakes layer to the createMap function
     createMap(earthquakes);
-    console.log(earthquakes);
 }
 
 function createMap(earthquakes) {
 
+    // Define streetmap and darkmap layers
     var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/light-v9/tiles/256/{z}/{x}/{y}?" +
     "access_token=pk.eyJ1Ijoia2pnMzEwIiwiYSI6ImNpdGRjbWhxdjAwNG0yb3A5b21jOXluZTUifQ." +
     "T6YbdDixkOBWH_k9GbS8JQ");
 
+    var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?" +
+    "access_token=pk.eyJ1Ijoia2pnMzEwIiwiYSI6ImNpdGRjbWhxdjAwNG0yb3A5b21jOXluZTUifQ." +
+    "T6YbdDixkOBWH_k9GbS8JQ");
+
+    // Define a baseMaps object to hold our base layers
+    var baseMaps = {
+        "Light Map": lightmap,
+        "Dark Map": darkmap
+    };
+
+    // Create overlay object to hold our overlay layer
     var overlayMaps = {
         Earthquakes: earthquakes
     };
 
+    // Create our map, giving it the streetmap and earthquakes layers to display on load
     var myMap = L.map("map", {
         center: [40.851824075995296, -116.39751334605495],
         zoom: 5,
         layers: [lightmap, earthquakes]
     });
+
+    // Create a layer control
+    // Pass in our baseMaps and overlayMaps
+    // Add the layer control to the map
+    L.control
+        .layers(baseMaps, overlayMaps, {
+            collapsed: false
+        }).addTo(myMap);
 }
