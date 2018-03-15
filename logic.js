@@ -19,11 +19,12 @@ d3.json(queryUrl, function(data) {
 
 function createFeatures(earthquakeData) {
 
+    var magnitudes = [0, 1, 2, 3, 4, 5];
+    var colors = ['Lime', 'YellowGreen', 'LightGoldenrodYellow', 'Orange', 'LightCoral', 'Tomato'];
+
     var getColors = d3.scaleLinear()
-    .domain(d3.extent(earthquakeData, function(earthquake){
-        return earthquake.properties.mag;
-    }))
-    .range(['lime', 'lightgreen', 'yellow', 'orange', 'red']);
+    .domain(magnitudes)
+    .range(colors)
 
     for (var i = 0; i < earthquakeData.length; i++) {
         L.circle([earthquakeData[i].geometry.coordinates[1], earthquakeData[i].geometry.coordinates[0]], {
