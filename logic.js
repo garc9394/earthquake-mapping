@@ -19,17 +19,17 @@ d3.json(queryUrl, function(data) {
 
 function createFeatures(earthquakeData) {
 
-    var magnitudes = [0, 1, 2, 3, 4, 5];
-    var colors = ['Lime', 'YellowGreen', 'LightGoldenrodYellow', 'Orange', 'LightCoral', 'Tomato'];
+    // var magnitudes = [0, 1, 2, 3, 4, 5];
+    // var colors = ['Lime', 'YellowGreen', 'LightGoldenrodYellow', 'Orange', 'LightCoral', 'Tomato'];
 
-    var getColors = d3.scaleLinear()
-    .domain(magnitudes)
-    .range(colors)
+    // var getColor = d3.scaleLinear()
+    // .domain(magnitudes)
+    // .range(colors)
 
     for (var i = 0; i < earthquakeData.length; i++) {
         L.circle([earthquakeData[i].geometry.coordinates[1], earthquakeData[i].geometry.coordinates[0]], {
             fillOpacity: 0.75,
-            fillColor: getColors(earthquakeData[i].properties.mag),
+            fillColor: getColor(earthquakeData[i].properties.mag),
             weight: 1,
             radius: markerSize(earthquakeData[i].properties.mag)
         }).addTo(myMap);
@@ -40,6 +40,26 @@ function createFeatures(earthquakeData) {
 // Define a markerSize function that will give each earthquake a different radius based on its magnitude
 function markerSize(magnitude) {
     return magnitude * 12000;
+
+    // var size = Math.log(magnitude * 10) * 12000;
+    // if (isNaN(size)) {
+    //     size = 0
+    // };
+    // return size;
+
+    // use different base with getBaseLog()
+
+}
+
+function getColor(mag) {
+    return mag > 7   ? '#800026' :
+           mag > 6   ? '#BD0026' :
+           mag > 5   ? '#E31A1C' :
+           mag > 4   ? '#FC4E2A' :
+           mag > 3   ? '#FD8D3C' :
+           mag > 2   ? '#FEB24C' :
+           mag > 1   ? '#FED976' :
+                       '#FFEDA0';
 }
 
 var legend = L.control({position: 'bottomright'});
@@ -47,17 +67,17 @@ var legend = L.control({position: 'bottomright'});
 legend.onAdd = function (myMap) {
 
     var div = L.DomUtil.create('div', 'info legend'),
-    grades = [0, 10, 20, 50, 100, 200, 500, 1000],
-    labels = [];
+        grades = [0, 1, 2, 3, 4, 5, 6, 7],
+        labels = [];
 
     // loop through our density intervals and generate a label with a colored square for each interval
     for (var i = 0; i < grades.length; i++) {
         div.innerHTML +=
             '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-}
+    }
 
-return div;
+    return div;
 };
 
 legend.addTo(myMap);
