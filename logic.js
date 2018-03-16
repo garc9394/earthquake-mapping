@@ -39,15 +39,9 @@ function createFeatures(earthquakeData) {
 
 // Define a markerSize function that will give each earthquake a different radius based on its magnitude
 function markerSize(magnitude) {
-    return magnitude * 12000;
+    // return magnitude * 12000;
 
-    // var size = Math.log(magnitude * 10) * 12000;
-    // if (isNaN(size)) {
-    //     size = 0
-    // };
-    // return size;
-
-    // use different base with getBaseLog()
+    return Math.exp(magnitude) * 2500;
 
 }
 
