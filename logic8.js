@@ -9,11 +9,11 @@ function createFeatures(earthquakeData) {
 
     var geojsonMarkerOptions = {
         fillOpacity: 0.75,
-        // fillColor: "#ff7800",
-        fillColor: getColor(),
+        fillColor: "#ff7800",
+        // fillColor: getColor(),
         weight: 1,
         radius: 8
-        // radius: markerSize(earthquakeData.mag)
+        // radius: markerSize(earthquakeData.properties.mag)
     };    
 
     function markerSize(magnitude) {
@@ -61,34 +61,29 @@ function createMap(earthquakes) {
         "Outdoors": outdoorsmap
     };
  
-    // for (var i = 0; i < earthquakes.length; i++) {
-    //     console.log([earthquakes[i].geometry.coordinates[1], earthquakes[i].geometry.coordinates[0]]);
-    //     console.log(getColor(earthquakes[i].properties.mag));
-    //     console.log(markerSize(earthquakes[i].properties.mag));
-    // }
-  
-    // for (var i = 0; i < earthquakes.length; i++) {
-    //     L.circle([earthquakes[i].geometry.coordinates[1], earthquakes[i].geometry.coordinates[0]], {
+    // var earthquakes = [];
+    // for (var i = 0; i < earthquakeData.length; i++) {
+    //     earthquakes.push(L.circle([earthquakeData[i].geometry.coordinates[1], earthquakeData[i].geometry.coordinates[0]], {
     //         fillOpacity: 0.75,
-    //         fillColor: getColor(earthquakes[i].properties.mag),
+    //         fillColor: getColor(earthquakeData[i].properties.mag),
     //         weight: 1,
-    //         radius: markerSize(earthquakes[i].properties.mag)
-    //     }).addTo(myMap);
+    //         radius: markerSize(earthquakeData[i].properties.mag)
+    //     }));
     // }
-    
+
     // function markerSize(magnitude) {
     //     return Math.exp(magnitude) * 2500;
     // }
     
     // function getColor(mag) {
     //     return mag > 7   ? '#800026' :
-    //             mag > 6   ? '#BD0026' :
-    //             mag > 5   ? '#E31A1C' :
-    //             mag > 4   ? '#FC4E2A' :
-    //             mag > 3   ? '#FD8D3C' :
-    //             mag > 2   ? '#FEB24C' :
-    //             mag > 1   ? '#FED976' :
-    //                         '#FFEDA0';
+    //            mag > 6   ? '#BD0026' :
+    //            mag > 5   ? '#E31A1C' :
+    //            mag > 4   ? '#FC4E2A' :
+    //            mag > 3   ? '#FD8D3C' :
+    //            mag > 2   ? '#FEB24C' :
+    //            mag > 1   ? '#FED976' :
+    //                        '#FFEDA0';
     // }
 
     var overlayMaps = {
