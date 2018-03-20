@@ -7,38 +7,20 @@ d3.json(earthquakeUrl, function(data) {
 
 function createFeatures(earthquakeData) {
 
-    // console.log(earthquakeData);
-
-    var geojsonMarkerOptions = {
-        fillOpacity: 0.75,
-        // fillColor: "#ff7800",
-        // add counter, and get mag from earthquakeData?
-        fillColor: getColor(feature.properties.mag),
-        // fillColor: getMag(),
-        weight: 1,
-        radius: 8
-        // radius: markerSize(earthquakeData.properties.mag)
-    };    
+    // var mags = [];
+    // for (var i = 0; i < earthquakeData.length; i++) {
+    //     mags.push(L.circle([earthquakeData[i].geometry.coordinates[1], earthquakeData[i].geometry.coordinates[0]], {
+    //         fillOpacity: 0.75,
+    //         fillColor: getColor(earthquakeData[i].properties.mag),
+    //         weight: 1,
+    //         radius: markerSize(earthquakeData[i].properties.mag)
+    //     }));
+    // }
 
     function markerSize(magnitude) {
         return Math.exp(magnitude) * 2500;
     }
     
-    function getMag() {
-        for (var i = 0; i < earthquakeData.length; i++) {
-            var mag = earthquakeData[i].properties.mag
-        }
-        return 'red';
-        // return mag > 7   ? '#800026' :
-        //        mag > 6   ? '#BD0026' :
-        //        mag > 5   ? '#E31A1C' :
-        //        mag > 4   ? '#FC4E2A' :
-        //        mag > 3   ? '#FD8D3C' :
-        //        mag > 2   ? '#FEB24C' :
-        //        mag > 1   ? '#FED976' :
-        //                    '#FFEDA0';
-    }
-
     function getColor(mag) {
         return mag > 7   ? '#800026' :
                mag > 6   ? '#BD0026' :
@@ -50,30 +32,25 @@ function createFeatures(earthquakeData) {
                            '#FFEDA0';
     }
 
-    // function geojsonMarkerOptions(mag) {
-    //     return({
-    //         fillOpacity: 0.75,
-    //         // fillColor: "#ff7800",
-    //         fillColor: getColor(mag),
-    //         weight: 1,
-    //         radius: 8
-    //     })
-    // };
+    // console.log(mags);
+
+    var earthquakes = [];
+    for (var i = 0; i < earthquakeData.length; i++) {
+        earthquakes.push(L.circleMarker([earthquakeData[i].geometry.coordinates[1], earthquakeData[i].geometry.coordinates[0]], {
+            fillOpacity: 0.75,
+            fillColor: getColor(earthquakeData[i].properties.mag),
+            weight: 1,
+            radius: markerSize(earthquakeData[i].properties.mag)
+        }));
+    }
 
     // var earthquakes = L.geoJSON(earthquakeData, {
-    //     pointToLayer: function (feature, latlng, mag) {
-    //         return L.circleMarker(latlng, geojsonMarkerOptions(mag));
+    //     pointToLayer: function (feature, latlng) {
+    //         return L.circleMarker(latlng, geojsonMarkerOptions);
     //     }
     // });
 
-    var earthquakes = L.geoJSON(earthquakeData, {
-        pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, geojsonMarkerOptions);
-        }
-    });
-
     console.log(earthquakes);
-    // console.log(geojsonMarkerOptions);
 
     createMap(earthquakes);
 
