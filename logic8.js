@@ -5,25 +5,41 @@ d3.json(earthquakeUrl, function(data) {
     createFeatures(data.features);
 });
 
+function markerSize(magnitude) {
+    // return Math.exp(magnitude);
+    return magnitude * 3;
+}
+
+function getColor(mag) {
+    return mag > 7   ? '#800026' :
+           mag > 6   ? '#BD0026' :
+           mag > 5   ? '#E31A1C' :
+           mag > 4   ? '#FC4E2A' :
+           mag > 3   ? '#FD8D3C' :
+           mag > 2   ? '#FEB24C' :
+           mag > 1   ? '#FED976' :
+                       '#FFEDA0';
+}
+
 function createFeatures(earthquakeData) {
 
     // console.log(earthquakeData);
 
-    function markerSize(magnitude) {
-        // return Math.exp(magnitude);
-        return magnitude * 3;
-    }
+    // function markerSize(magnitude) {
+    //     // return Math.exp(magnitude);
+    //     return magnitude * 3;
+    // }
     
-    function getColor(mag) {
-        return mag > 7   ? '#800026' :
-               mag > 6   ? '#BD0026' :
-               mag > 5   ? '#E31A1C' :
-               mag > 4   ? '#FC4E2A' :
-               mag > 3   ? '#FD8D3C' :
-               mag > 2   ? '#FEB24C' :
-               mag > 1   ? '#FED976' :
-                           '#FFEDA0';
-    }
+    // function getColor(mag) {
+    //     return mag > 7   ? '#800026' :
+    //            mag > 6   ? '#BD0026' :
+    //            mag > 5   ? '#E31A1C' :
+    //            mag > 4   ? '#FC4E2A' :
+    //            mag > 3   ? '#FD8D3C' :
+    //            mag > 2   ? '#FEB24C' :
+    //            mag > 1   ? '#FED976' :
+    //                        '#FFEDA0';
+    // }
 
     function geojsonMarkerOptions(mag) {
         return({
@@ -82,24 +98,24 @@ function createMap(earthquakes) {
         collapsed: false
     }).addTo(myMap);
 
-    // var legend = L.control({position: 'bottomright'});
+    var legend = L.control({position: 'bottomright'});
 
-    // legend.onAdd = function (myMap) {
+    legend.onAdd = function (myMap) {
     
-    //     var div = L.DomUtil.create('div', 'info legend'),
-    //         grades = [0, 1, 2, 3, 4, 5, 6, 7],
-    //         labels = [];
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = [0, 1, 2, 3, 4, 5, 6, 7],
+            labels = [];
     
-    //     // loop through our density intervals and generate a label with a colored square for each interval
-    //     for (var i = 0; i < grades.length; i++) {
-    //         div.innerHTML +=
-    //             '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-    //             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-    //     }
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML +=
+                '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+        }
     
-    //     return div;
-    // };
+        return div;
+    };
     
-    // legend.addTo(myMap);
+    legend.addTo(myMap);
 
 }
