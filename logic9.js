@@ -4,7 +4,7 @@ var tectonicplateUrl = "./GeoJSON/PB2002_boundaries.json";
 var earthquakes, tectonicplates;
 
 d3.json(earthquakeUrl, function(data) {
-    createFeatures(data.features);
+    earthquakes = createFeatures(data.features);
 });
 
 // d3.json(tectonicplateUrl, function(data) {
@@ -12,7 +12,7 @@ d3.json(earthquakeUrl, function(data) {
 // });
 
 d3.json(tectonicplateUrl, function(data) {
-    createTectonicplates(data.features);
+    tectonicplates = createTectonicplates(data.features);
 });
 
 function markerSize(magnitude) {
