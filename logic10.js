@@ -1,21 +1,20 @@
 
 var earthquakeUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 var tectonicplateUrl = "./GeoJSON/PB2002_boundaries.json";
-var earthquakes, tectonicplates;
 
-earthquakes = d3.json(earthquakeUrl, function(data) {
-    earthquakes = createFeatures(data.features);
-    return earthquakes;
+d3.json(earthquakeUrl, function(data) {
+    createFeatures(data.features);
 });
 
 // d3.json(tectonicplateUrl, function(data) {
 //     var tectonicplates = L.geoJSON(data.features);
 // });
 
-tectonicplates = d3.json(tectonicplateUrl, function(data) {
-    tectonicplates = createTectonicplates(data.features);
-    return tectonicplates;
-});
+function getTectonicplatesData() {
+    d3.json(tectonicplateUrl, function(data) {
+        return createTectonicplates(data.features);
+    });
+}
 
 function markerSize(magnitude) {
     // return Math.exp(magnitude);
@@ -50,26 +49,15 @@ function createFeatures(earthquakeData) {
         }
     });
 
-    // console.log(earthquakes);
-    // console.log(geojsonMarkerOptions);
-
-    return earthquakes;
-    // createMap(earthquakes);
+    createMap(earthquakes);
 
 }
 
 function createTectonicplates(tectonicplatesData) {
-    tectonicplates = L.geoJSON(tectonicplatesData);
-
-    return tectonicplates;
-    // createMap(tectonicplates);
+    return L.geoJSON(tectonicplatesData);
 }
 
-console.log(earthquakes);
-console.log(tectonicplates);
-createMap(earthquakes, tectonicplates);
-
-function createMap(earthquakes, tectonicplates) {
+function createMap(earthquakes) {
 
     var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?" +
     "access_token=pk.eyJ1Ijoia2pnMzEwIiwiYSI6ImNpdGRjbWhxdjAwNG0yb3A5b21jOXluZTUifQ." +
@@ -89,15 +77,21 @@ function createMap(earthquakes, tectonicplates) {
         "Outdoors": outdoorsmap
     };
 
+    // tectonicplates not defined
+    var tectonicplates = getTectonicplatesData();
+    console.log(tectonicplates);
+
     var overlayMaps = {
-        "Earthquakes": earthquakes,
-        "Tectonicplates": tectonicplates
+        "Earthquakes": earthquakes
+        // "Earthquakes": earthquakes,
+        // "Tectonicplates": tectonicplates
     };
 
     var myMap = L.map("map", {
         center: [40.851824075995296, -100.39751334605495],
         zoom: 3,
-        layers: [satellitemap, earthquakes, tectonicplates]
+        layers: [satellitemap, earthquakes]
+        // layers: [satellitemap, earthquakes, tectonicplates]
     });
 
     L.control
