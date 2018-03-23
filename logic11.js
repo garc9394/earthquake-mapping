@@ -40,10 +40,9 @@ function createFeatures(earthquakeData) {
             })
         );
     }
-    // console.log(earthquakeMarkers);
 }
 
-
+// console.log(earthquakeMarkers);
 
 function createTectonicplates(tectonicplatesData) {
     tectonicplateMarkers = L.geoJSON(tectonicplatesData);
@@ -88,6 +87,8 @@ L.control
 .layers(baseMaps, overlayMaps, {
     collapsed: false
 }).addTo(myMap);
+
+// earthquakes.addTo(myMap);
 
 var legend = L.control({position: 'bottomright'});
 

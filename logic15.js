@@ -1,23 +1,12 @@
-
 var earthquakeUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
-var tectonicplateUrl = "./GeoJSON/PB2002_boundaries.json";
+var earthquakeData = [];
+var earthquakes = [];
 
 d3.json(earthquakeUrl, function(data) {
-    createFeatures(data.features);
+    earthquakeData.push(data.features);
 });
 
-// d3.json(tectonicplateUrl, function(data) {
-//     var tectonicplates = L.geoJSON(data.features);
-// });
-
-// function getTectonicplatesData() {
-//     d3.json(tectonicplateUrl, function(data) {
-//         createTectonicplates(data.features);
-//     });
-// }
-
 function markerSize(magnitude) {
-    // return Math.exp(magnitude);
     return magnitude * 3;
 }
 
@@ -32,7 +21,7 @@ function getColor(mag) {
                        '#FFEDA0';
 }
 
-function createFeatures(earthquakeData) {
+// function createFeatures(earthquakeData) {
 
     function geojsonMarkerOptions(mag) {
         return({
@@ -43,29 +32,23 @@ function createFeatures(earthquakeData) {
         })
     };
 
-    earthquakes = L.geoJSON(earthquakeData, {
+    L.geoJSON(earthquakeData, {
         pointToLayer: function (feature, latlng) {
-            return L.circleMarker(latlng, geojsonMarkerOptions(feature.properties.mag));
+            earthquakes.push(L.circleMarker(latlng, geojsonMarkerOptions(feature.properties.mag)));
         }
     });
 
-    tectonicplatesData = d3.json(tectonicplateUrl, function(data) {
-        return data.features;
-    });
+    // var earthquakes = L.geoJSON(earthquakeData, {
+    //     pointToLayer: function (feature, latlng) {
+    //         return L.circleMarker(latlng, geojsonMarkerOptions(feature.properties.mag));
+    //     }
+    // });
 
-    tectonicplates = L.geoJSON(tectonicplatesData); // edit
+    // createMap(earthquakes);
 
-    createMap(earthquakes);
-    // createMap(earthquakes, tectonicplates);
-
-}
-
-// function createTectonicplates(tectonicplatesData) {
-//     return L.geoJSON(tectonicplatesData);
 // }
 
-// function createMap(earthquakes, tectonicplates) {
-function createMap(earthquakes) {
+// function createMap(earthquakes) {
 
     var satellitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/satellite-v9/tiles/256/{z}/{x}/{y}?" +
     "access_token=pk.eyJ1Ijoia2pnMzEwIiwiYSI6ImNpdGRjbWhxdjAwNG0yb3A5b21jOXluZTUifQ." +
@@ -85,21 +68,14 @@ function createMap(earthquakes) {
         "Outdoors": outdoorsmap
     };
 
-    // tectonicplates not defined
-    // var tectonicplates = getTectonicplatesData();
-    // console.log(tectonicplates);
-
     var overlayMaps = {
         "Earthquakes": earthquakes
-        // "Earthquakes": earthquakes,
-        // "Tectonicplates": tectonicplates
     };
 
     var myMap = L.map("map", {
         center: [40.851824075995296, -100.39751334605495],
         zoom: 3,
         layers: [satellitemap, earthquakes]
-        // layers: [satellitemap, earthquakes, tectonicplates]
     });
 
     L.control
@@ -127,4 +103,4 @@ function createMap(earthquakes) {
     
     legend.addTo(myMap);
 
-}
+// }
